@@ -223,6 +223,7 @@
     <Compile Include="Areas\Admin\Controllers\InvoiceController.cs" />
     <Compile Include="Areas\Admin\Controllers\Product1Controller.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
+    <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
     <Compile Include="Areas\Test\Controllers\TestingThemeController.cs" />
     <Compile Include="Areas\Test\TestAreaRegistration.cs" />
     <Compile Include="Authorize\AuthorizeAttribute.cs" />
@@ -1369,6 +1370,7 @@
     <Content Include="Areas\Admin\Views\Customer\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Product1\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Product1\Create.cshtml" />
+    <Content Include="Areas\Customer\Views\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1422,6 +1424,9 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Customer\Controllers\" />
+    <Folder Include="Areas\Customer\Models\" />
+    <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Areas\Test\Models\" />
   </ItemGroup>
   <ItemGroup>
