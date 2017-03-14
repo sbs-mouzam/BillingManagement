@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "JqueryTest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Content/juquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+  $( function() {
+
+      $(".txtSearchProduct").autocomplete(
+          {
+          source: '@Url.Action("GetProductNames")',
+         autoFocus:true
+    });
+  } );
+</script>
+<button id="btnSaveProduct">Add Row</button>
+<input type="text" class="form-control" />
+<div class="row" id="NewDiv">
+     
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        
+    })
+</script>

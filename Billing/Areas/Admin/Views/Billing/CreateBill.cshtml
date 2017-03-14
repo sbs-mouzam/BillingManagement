@@ -1,0 +1,60 @@
+﻿@model BusinessObjectLayer.CommonModels.ProductModel
+@{
+    ViewBag.Title = "CreateBill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Content/juquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+  $( function() {
+
+      $("#txtSearchProduct").autocomplete(
+          {
+          source: '@Url.Action("GetProductNames")',
+         autoFocus:true
+    });
+  } );
+</script>
+<h2>CreateBill</h2>
+@*<input type="text" class="form-control" id="txtSearchProduct" placeholder="Customer Name">*@
+<div class="container">
+    <div class="row">
+        <button class="btn btn-success" type="button" id="btnAddMore">Add More</button>
+        <table class="table table-bordered" id="tbl">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Discount</th>
+                    <th>Total</th>
+
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+ 
+<script>
+    $(document).ready(function () {
+        $(document).on("click", "#btnAddMore", function (e) {
+            e.stopImmediatePropagation();
+            var _ProductName = '<input type="text" class="ProductName"  id="txtSearchProduct"/>';
+            var _Quantity = '<input type="text" class="Quantity"/>';
+            var _Price = '<input type="text" class="Price"/>';
+            var _Discount = '<input type="text" class="Discount"/>';
+            var _Total = '<input type="text" class="Total"/>';
+            var _textAnchor = '<a href="#" class="deleteRow">Delete</a>';
+            var trRow = '<tr class="trRow"><td>' + _ProductName + '</td><td>' + _Quantity + '</td><td>' + _Discount + '</td><td>' + _Total + '</td><td>' + _textAnchor + '</td></tr>';
+            $("#tbl tbody").append(trRow);
+        });
+        $(document).on("click", ".deleteRow", function (e) {
+            e.stopImmediatePropagation();
+            $(this).closest('.trRow').remove();
+        });
+    });
+
+    </script>

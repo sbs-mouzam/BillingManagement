@@ -1,0 +1,56 @@
+﻿
+@model BusinessObjectLayer.CommonModels.ProductModel
+
+<div class="col-lg-12">
+    <table class="table table-bordered table-hover table-responsive">
+        <thead>
+            <tr>
+                <td><b> Id</b></td>
+                <td><b>Product Name</b></td>
+                <td><b>Description</b></td>
+                <td><b>Category Name</b></td>
+                <td><b>Price</b></td>
+                <td><b>Image</b></td>
+                <td><b>Edit</b></td>
+                <td><b>Delete</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProductList)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.Description</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.Price</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(item.Image))
+                        {
+                            string imageBase64 = item.Image;
+                            <img src="data:image/@item.ImageType;base64, @imageBase64" id="base64Img" class="span12 " height="100" width="100">
+                        }
+
+                    </td>
+
+
+                    <td>
+                        <button value="Edit"
+                                class="btn btn-info btn-sm EditProduct" type="button" data-id="@item.ID" >
+                            Edit
+                        </button>
+                    </td>
+                    <td>
+                        <button value="Edit"
+                                class="btn btn-info btn-sm" type="button"  >
+                            Delete
+                        </button>
+                    </td>
+                    @*<td>@Html.ActionLink("Delete", "Delete", "Category", new { id = item.CategoryId })</td>*@
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

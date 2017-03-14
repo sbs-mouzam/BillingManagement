@@ -1,0 +1,161 @@
+﻿@model BusinessObjectLayer.CommonModels.CustomerModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutPage1.cshtml";
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Add Customer</h3>
+            </div>
+            <div class="row">
+                <form role="form">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" class="form-control RequiredTextField" id="txtCustomerName" value="@Model.CustomerName" name="@Model.CustomerName" placeholder="Customer Name">
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" class="form-control RequiredTextField" id="txtMobile" value="@Model.Mobile" name="@Model.Mobile" placeholder="Mobile">
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" class="form-control RequiredTextField" id="txtEmail" value="@Model.Email" name="@Model.Email" placeholder="Email">
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Date of Birth</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="date" class="form-control RequiredTextField" id="clnDob" value="@Model.DOB" name="@Model.DOB">
+                            </div>
+                        </div>
+
+                        <br />
+                        <br />
+
+                        <input type="hidden" id="hdnCustomerId" value="@Model.ID" />
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                @if (Model.ID != null && Model.ID != 0)
+                                {
+                                    <button type="button" class="btn btn-success" data-id="@Model.ID" id="btnRegisterUpdate">
+                                        <span style="display: none;"> <img src="/images/loader.gif">  </span>
+                                        Update
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-success" data-id="0" id="btnRegister">
+                                        <span style="display: none;"> <img src="/images/loader.gif">  </span>
+                                        Register
+                                    </button>
+                                }
+                                <button type="button" class="btn btn-danger">Cancel</button>
+                            </div>
+                        </div>
+
+                        @*<div class="ln_solid"></div>
+                            <input type="hidden" value="@Model.CategoryId" />
+                            <div class="form-group">
+                                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                    <button type="button" id="btnRegister" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-success">Cancel</button>
+                                </div>
+                            </div>*@
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div class="row" id="listCustomer">
+    @Html.Action("AddCustomer")
+</div>*@
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/toastr.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(document).on("click", "#btnRegister,#btnRegisterUpdate", function (e) {
+            var _CustomerModel = {
+                ID: $("#hdnCustomerId").val(),
+                CustomerName: $("#txtCustomerName").val(),
+                Mobile: $("#txtMobile").val(),
+                Email: $("#txtEmail").val(),
+                DOB: $("#clnDob").val()
+
+            };
+            buttonDisabledReg();
+            $.ajax({
+                url: "http://localhost:56802/Admin/Customer/AddCustomer",
+                type: "POST",
+                data: _CustomerModel,
+                success: function (response) {
+                    $("#listCustomer").empty().append(response);
+                    buttonEnableReg();
+                    toastr.success("Customer Inserted");
+                    if (response != null) {
+                        Clear();                       
+                        window.location.href = '/Admin/Customer/Index';
+                    }
+                },
+                error: function (err) {
+                    toastr.error("Registration failed: Internal server error");
+                    buttonEnableReg();
+                    console.log(err);
+                }
+            });
+        });
+    });
+
+    function Clear()
+    {
+        $("#hdnCustomerId").val("");
+        $("#txtCustomerName").val("");
+        $("#txtMobile").val("");
+        $("#txtEmail").val("");
+        $("#clnDob").val("");
+    }
+    function buttonEnableReg() {
+        $("#btnRegister span,#btnRegisterUpdate span").hide();
+        $("#btnRegister,#btnRegisterUpdate").prop("disabled", false);
+    }
+
+
+    function buttonDisabledReg() {
+        $("#btnRegister span,#btnRegisterUpdate span").show();
+        $("#btnRegister,#btnRegisterUpdate").prop("disabled", true);
+    }
+
+    function ClearFields() {
+        $(".RequiredTextField").each(function () {
+            $(this).val('');
+        });
+        $(".RequiredRadioField").each(function () {
+            $(this).prop('checked', false);
+        });
+        $("#txtGuarId,#txtId").val('0');
+    }
+</script>

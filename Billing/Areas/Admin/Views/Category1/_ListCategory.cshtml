@@ -1,0 +1,44 @@
+﻿@model BusinessObjectLayer.CommonModels.CategoryModel
+<div class="col-lg-12">
+    <table class="table table-bordered table-hover table-responsive">
+        <thead>
+            <tr>
+                <td><b>Category Id</b></td>
+                <td><b>Category Name</b></td>
+                <td><b>Parent Id</b></td>
+                <td><b>Edit</b></td>
+                <td><b>Delete</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CategoryList)
+            {
+                <tr>
+                    <td>@item.CategoryId</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.ParentId</td>                    
+                    <td>
+                        <button value="Edit"
+                                class="btn btn-info btn-sm" type="button" id="addressSearch"
+                                onclick="location.href='@Url.Action("Create", "Category" ,new {id = item.CategoryId })'">
+                            Edit
+                        </button>
+                    </td>
+                    <td>
+                        <button value="Edit"
+                                class="btn btn-info btn-sm" type="button" id="addressSearch"
+                                onclick="location.href='@Url.Action("Create", "Category" ,new {id = item.CategoryId })'">
+                            Delete
+                        </button>
+                    </td>
+                    @*<td>@Html.ActionLink("Delete", "Delete", "Category", new { id = item.CategoryId })</td>*@
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+

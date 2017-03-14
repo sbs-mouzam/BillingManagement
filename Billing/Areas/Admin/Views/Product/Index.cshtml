@@ -1,0 +1,188 @@
+﻿
+@model BusinessObjectLayer.CommonModels.ProductModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutPage1.cshtml";
+
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Add Category</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12 pull-right">
+                        <button type="button" class="btn btn-primary" id="btnAddProduct">Add Product</button>
+                        <br />
+                        <div id="modalProduct" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="productModalLabel"></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="row" id="addEditProductPartial">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="btnSaveProduct">Save changes</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </div>
+                </div>
+                <br />
+                <div class="row" id="tblProducts">
+                    @Html.Action("AddProduct")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+   // var _CategoryName = $("#txtCategoryName");
+    var _ParentId = $("#ddnCategory option:selected");
+    var hdrTextSaveProduct = "Add Product";
+    var hdrTextEditProduct = "Edit Product";
+    function initProduct() {
+       // var _CategoryName = $("#txtCategoryName");
+        var _ParentId = $("#ddnCategory option:selected");
+    }
+    $(document).ready(function () {
+        //Save product
+        $(document).on("click", "#btnSaveProduct", function (e) {
+            e.stopImmediatePropagation();
+            var productPrice = "0";
+            if (_productPrice.val().trim() == "") {
+                productPrice = "0";
+            } else {
+                productPrice = _productPrice.val().trim();
+            }
+            var _productId = $("#txtProductId").val();
+            if (_productId.trim() == "") {
+                _productId = "0";
+            }
+            var _productRegistrationModal = {
+                ID: _productId,
+                ProductName: _productName.val().trim(),
+                Description: _productDesc.val().trim(),
+                Price: productPrice,
+                CategoryId: _productCategoryId.val(),
+                Image: _productImageBase64.val(),
+                ImageType: _productImageBase64Ext.val()
+            };
+            buttonDisabledReg();
+            $.ajax({
+                url: folderBaseURL + "Admin/Product/AddProduct",
+                type: "POST",
+                data: _productRegistrationModal,
+                success: function (response) {
+                    $("#tblProducts").empty().append(response);
+                    $().val()
+                    buttonEnableReg();
+                    clearModalProducts();
+                },
+                error: function (err) {
+                    toastr.error("Product registration failed: Internal server error");
+                    buttonEnableReg();
+                    console.log(err);
+                }
+            });
+        });
+        $(document).on("change", "#uploadProductImage", function (e) {
+            if (this.files && this.files[0]) {
+                var _filesName = this.files[0];
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    var _imageSrcB64 = e.target.result;
+                    var _extension = GetProperImageExtension(_filesName.name.split('.').pop().toLowerCase());
+                    imageShowHide(_imageSrcB64, true, _extension);
+                };
+                FR.readAsDataURL(this.files[0]);
+            }
+        });
+        $(document).on("click", "#btnAddProduct", function () {
+            $("#modalProduct").modal("show");
+            loadProductModal("");
+            $("#productModalLabel").empty().append(hdrTextSaveProduct);
+        });
+        $(document).on("click", ".EditProduct", function () {
+            $("#modalProduct").modal("show");
+            loadProductModal($(this).data("id"));
+            $("#productModalLabel").empty().append(hdrTextEditProduct);
+        });
+    });
+    function buttonEnableReg() {
+        $("#btnSaveProduct").prop("disabled", false);
+    }
+    function buttonDisabledReg() {
+        $("#btnSaveProduct").prop("disabled", true);
+    }
+    function imageShowHide(_imgSrc, _isVisible, _fileExt) {
+        if (_fileExt != undefined && _fileExt != null && _fileExt.trim()!="") {
+            _fileExt = _fileExt.trim();
+        } else {
+            _fileExt = "";
+        }
+        var _image = $("#imageProduct");
+        _productImageBase64.val('');
+        _productImageBase64Ext.val('');
+        if (_isVisible) {
+            _image.removeClass("hide");
+            _image.attr("src", _imgSrc);
+            var _imageBase64Hdn = _imgSrc.replace("data:image/" + _fileExt + ";base64,", "");
+            _productImageBase64.val(_imageBase64Hdn);
+            _productImageBase64Ext.val(_fileExt);
+        } else {
+            if (!_image.hasClass("hide")) {
+                _image.addClass("hide");
+            }
+            _image.attr("src", "");
+        }
+    }
+
+    function loadProductModal(_productModalId) {
+        if (_productModalId == undefined || _productModalId==null) {
+            _productModalId = "";
+        }
+        $("#addEditProductPartial").load(folderBaseURL + "Admin/Product/ProductModal/" + _productModalId);
+    }
+    function clearModalProducts() {
+        $("#txtProductName").val("");
+        $("#txtProductDesc").val("");
+        $("#txtProductPrice").val("");
+        $("#ddnCategory").val("0");
+        $("#uploadProductImage").val("");
+        imageShowHide("", false,"");
+    }
+    function GetProperImageExtension(_ImageExt) {
+        if (_ImageExt != undefined && _ImageExt != null && (_ImageExt.trim().toLowerCase() == "jpg" || _ImageExt.trim().toLowerCase() == "jpeg")) {
+            _ImageExt = "jpeg";
+            return _ImageExt;
+        } else if (_ImageExt != undefined && _ImageExt != null && (_ImageExt.trim().toLowerCase() == "png")) {
+            _ImageExt = "png";
+            return _ImageExt;
+        } else if (_ImageExt != undefined && _ImageExt != null && (_ImageExt.trim().toLowerCase() == "gif")) {
+            _ImageExt = "gif";
+            return _ImageExt;
+        } else {
+            return _ImageExt;
+        }
+    }
+</script>

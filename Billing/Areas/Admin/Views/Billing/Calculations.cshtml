@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Calculations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Calculations</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <input type="text"  class="form-control" id="txtName"/>
+    </div>
+    <div class="col-md-3">
+        <input type="text" class="form-control" id="Quantity" />
+
+    </div>
+    <div class="col-md-3">
+        <input type="text" class="form-control" id="Price" />
+
+    </div>
+    <div class="col-md-3">
+        <input type="text" class="form-control" id="total" />
+
+    </div>
+
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function(){
+                
+        $("#txtName,#Price,#total").keypress(function () {
+           
+            var qty = ("#Price").val();
+            var totl = ("#total").val();
+            alert("123");
+            totl = pprice * qty;
+            alert(totl);
+            ("#total").val(totl);
+            
+        }
+        );
+    
+    });
+</script>

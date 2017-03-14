@@ -1,0 +1,92 @@
+﻿
+@model BusinessObjectLayer.CommonModels.ProductModel
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-8">
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Product Name</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                <input type="hidden" class="form-control" id="txtProductId" value="@Model.ID" name="@Model.ID" >
+                <input type="text" class="form-control" id="txtProductName" value="@Model.ProductName" name="@Model.ProductName" placeholder="Default Input">
+            </div>
+        </div>
+       <div class="divider">&nbsp;</div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                <textarea class="form-control" name="@Model.Description" id="txtProductDesc">@Model.Description</textarea>
+            </div>
+        </div>
+        <div class="divider">&nbsp;</div>
+
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                <input type="text" class="form-control" id="txtProductPrice" value="@Model.Price" name="@Model.Price" placeholder="Default Input">
+            </div>
+        </div>
+        <div class="divider">&nbsp;</div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                @*<input type="hidden" id="hdnCategoryId" value="@(Model.ParentID)" />*@
+                <select class="form-control select2_single " id="ddnCategory">
+                    <option value="0">Select Category Name</option> 
+                    @if (Model.CategoryList != null)
+                    {
+                        foreach (var item in Model.CategoryList)
+                        {
+                            string isSelected = string.Empty;
+                            if (item.CategoryId == Model.CategoryId)
+                            {
+                                isSelected = "selected";
+                            }
+                            <option value="@item.CategoryId" @isSelected>@item.CategoryName</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="divider">&nbsp;</div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Product Image</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                <input type="file" class="form-control" id="uploadProductImage" value="@Model.Image" name="@Model.Image" placeholder="Default Input">
+            </div>
+        </div>
+       </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                @{
+                    string imageBase64 = string.Empty;
+                    string imageBase64Src = string.Empty;
+                    string classHide = "hide";
+                    if (!string.IsNullOrWhiteSpace(Model.Image))
+                    {
+                        imageBase64 = Model.Image;// Convert.ToBase64String(Model.Photo);
+                        imageBase64Src = "data:image/" + Model.ImageType + ";base64," + imageBase64;
+                        classHide = string.Empty;
+                    }
+                }
+                <img class="@classHide imageRegistration" src="@imageBase64Src" id="imageProduct" />
+                <input type="hidden" id="hdnImageBase64" value="@imageBase64" />
+                <input type="hidden" id="hdnImageBase64Ext" value="@Model.ImageType" />
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .imageRegistration {
+        width: 150px;
+        height: 150px;
+    }
+
+    .stepContainer {
+        height: 200px;
+    }
+</style>
+<script>
+    initProduct();
+</script>

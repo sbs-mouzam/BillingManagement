@@ -1,0 +1,543 @@
+﻿@model BusinessObjectLayer.CommonModels.ProductModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutPage1.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Add Category</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                @*<input type="hidden" id="hdnCategoryId" value="@(Model.ParentID)" />*@
+                                <select class="form-control select2_single " id="ddnCustomer">
+                                    <option value="0">Select Customer Name</option>
+                                    @if (Model.CustomerList != null)
+                                    {
+                                        foreach (var item in Model.CustomerList)
+                                        {
+                                            string isSelected = string.Empty;
+                                            if (item.ID == Model.ID)
+                                            {
+                                                isSelected = "selected";
+                                            }
+                                            <option value="@item.ID" @isSelected>@item.CustomerName</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Invc Date</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="date" class="form-control" id="txtInvoiceDate">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="ProductId">Product ID</th>
+                                        <th>Product Name</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Discount</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblActiveProducts"></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td id="" class="ProductId"></td>
+                                        <td><button class="btn btn-success" id="btnCreateProducts">Add more</button></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="" class="ProductId"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            Sub total
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control productAmountSubtotal" id="productAmountSubtotal" readonly />
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="" class="ProductId"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Discount</td>
+                                        <td>
+                                            <input type="text" class="form-control productFinalDiscount numericValidation" id="productFinalDiscount" />
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="" class="ProductId"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Adjustment</td>
+                                        <td>
+                                            <input type="text" class="form-control ProductAdjustment" id="ProductAdjustment" />
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="" class="ProductId"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total</td>
+                                        <td>
+                                            <input type="text" class="form-control PorductGrandTotal" id="PorductGrandTotal" readonly />
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-success" id="btnSaveBilling">Save billing</button>
+                        </div>
+                    </div>
+
+                    <div id="tblProductDiv" style="display:none;">
+                        <table>
+                            <tbody id="tblProductTbody">
+                                <tr class="trBillingRow">
+                                    <td id="" class="ProductId"></td>
+                                    <td>
+                                        <input type="text" class="form-control productSelection" />
+                                        <input type="hidden" class="form-control productSelectionId" />
+                                        @*<select class="form-control ddnSearchProductName" id="ddnSearchProductName">
+                                    <option value="0">Select Product</option>
+                                    @foreach (var item in Model.ProductList)
+                                    {
+                                        <option value="@item.ID">@item.ProductName</option>
+                                    }
+                                </select>*@
+                                        @*<input type="text" class="form-control" id="txtSearchProductName" placeholder="Customer Name">*@
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control productQuantity productBilling" />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@Model.Price" class="form-control productPrice productBilling" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control productDiscount numericValidation productBilling" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control productAmount productBilling" readonly />
+                                    </td>
+                                    <td>
+                                        <a href="#" class="deleteProductRow">Delete</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<script>
+    var customerId = $("#ddnCustomer option:selected");
+    var _jsonTableBillingRow = {
+        ProductName: "",
+        ProductNameId: "",
+        ProductQuantity: 0,
+        ProductPrice: 0,
+        ProductDiscount: 0,
+        ProductAmount: 0,
+         
+    };
+    var _jsonTableBillingList = [];
+    var _jsonTableBilling = {
+        BillingList: _jsonTableBillingRow,
+        CustomerId:"",
+        SubTotal: 0,
+        Discount: 0,
+        Adjustment: 0,
+        GrandTotal: 0
+    };
+    $(document).on("change copy cut paste", ".productBilling", function (e) {
+        e.stopImmediatePropagation();
+        readTableAndCalculate();
+    });
+    $(document).on("change", ".ddnSearchProductName", function (e) {
+        e.stopImmediatePropagation();
+        whenSelectProductAddDetails(1, 20, 0, $(this));
+    });
+    $(document).on("change copy cut paste", "#productFinalDiscount", function (e) {
+        e.stopImmediatePropagation();
+        var _subTotalVal = toCheckIsNumberOrInteger($("#productAmountSubtotal").val().trim(), false);
+        var _discValue = toCheckIsNumberOrInteger($("#productFinalDiscount").val().trim(), true);
+        if (toValidateDiscountSubTotal(_subTotalVal, _discValue)) {
+            //readTableAndCalculate();
+        }
+        readTableAndCalculate();
+    });
+    $(document).on("change copy cut paste", "#ProductAdjustment", function (e) {
+        e.stopImmediatePropagation();
+        var _subTotalVal = toCheckIsNumberOrInteger($("#productAmountSubtotal").val().trim(), false);
+        var _adjstValue = toCheckIsNumberOrInteger($("#ProductAdjustment").val().trim(), true);
+        if (toValidateAdjustment(_subTotalVal, _adjstValue)) {
+            // readTableAndCalculate();
+        }
+        readTableAndCalculate();
+    });
+    $(document).on("click", "#btnSaveBilling", function (e) {
+        e.stopImmediatePropagation();            
+      
+        _jsonTableBilling.CustomerId = $("#ddnCustomer option:selected").val();
+        if (_jsonTableBilling.CustomerId == undefined || _jsonTableBilling.CustomerId == null || _jsonTableBilling.CustomerId.trim() == "" || _jsonTableBilling.CustomerId.trim() == "0") {
+            toastr.error("Please select customer");
+            return false;
+        }
+        var _PorductGrandTotal = toCheckIsNumberOrInteger($("#PorductGrandTotal").val().trim(), false);
+        if (_jsonTableBillingList.length <= 0 || _PorductGrandTotal <= 0) {
+            toastr.error("Please enter billing details");
+            return false;
+        }
+
+        $.ajax({
+            url: folderBaseURL + "Billing/SaveBilling",
+            type: "POST",            
+            data: _jsonTableBilling,
+            success: function (resultDataId) {
+                if (resultDataId != undefined && resultDataId != null) {
+                    resetBillingPage();
+                    toastr.success("Success");
+                    $(this).prop("disabled", true);
+                    window.location.href = '/Admin/Invoice/Index/' + resultDataId;
+                }
+            },
+            error: function (resultError) {
+                toastr.error("Error");
+            }
+        });
+    });
+    //
+    function clearJsonObjectBilling() {
+        _jsonTableBillingRow = {
+            ProductName: "",
+            ProductNameId: "",
+            ProductQuantity: 0,
+            ProductPrice: 0,
+            ProductDiscount: 0,
+            ProductAmount: 0
+        };
+        _jsonTableBillingList = [];
+        _jsonTableBilling = {
+            BillingList: _jsonTableBillingList,
+            SubTotal: 0,
+            Discount: 0,
+            Adjustment: 0,
+            GrandTotal: 0
+        };
+    }
+    function readTableAndCalculate(_isHasAlert) {
+        if (_isHasAlert == undefined || _isHasAlert == null) {
+            _isHasAlert = false;
+        }
+        clearJsonObjectBilling();
+        var _subTotalAmount = 0;
+        var _grandTotal = 0;
+        var _billDiscount = 0;
+        var _billAdjustment = 0;
+       // CustomerId: $("#ddnCustomer option:selected")
+        $("#tblActiveProducts tr").each(function (index, value) {
+            _jsonTableBillingRow = {};
+            var _productName = $(this).find(".productSelection").text().trim();
+            var _productNameId = $(this).find(".productSelectionId").val().trim();
+            if (toValidateProductSelected(_productNameId, _isHasAlert)) {
+                var _productQuantity = toCheckIsNumberOrInteger($(this).find(".productQuantity").val().trim(), true);
+                var _productPrice = toCheckIsNumberOrInteger($(this).find(".productPrice").val().trim(), false);
+                var _productDiscount = toCheckIsNumberOrInteger($(this).find(".productDiscount").val().trim(), false);
+                var _productAmount = (_productQuantity * _productPrice);
+                if (checkForIncorrectValue(_productDiscount)) {
+                    _productAmount = (_productAmount - getDiscountPrice(_productAmount, _productDiscount));
+                }
+                _productAmount = toCheckIsNumberOrInteger(_productAmount, false);
+                _jsonTableBillingRow.ProductName = _productName;
+                _jsonTableBillingRow.ProductNameId = _productNameId;
+                _jsonTableBillingRow.ProductQuantity = _productQuantity;
+                _jsonTableBillingRow.ProductPrice = _productPrice;
+                _jsonTableBillingRow.ProductDiscount = _productDiscount;
+                _jsonTableBillingRow.ProductAmount = _productAmount;
+                $(this).find(".productAmount").val(_productAmount);
+                _jsonTableBillingList.push(_jsonTableBillingRow);
+                _subTotalAmount = (_subTotalAmount + _productAmount);
+                _jsonTableBilling.SubTotal = _subTotalAmount;
+            } else {
+                _productAmount = 0;
+                $(this).find(".productAmount").val(_productAmount);
+            }
+        });
+        if (checkForIncorrectValue(_subTotalAmount)) {
+            _grandTotal = _subTotalAmount;
+            var _billDiscountTxt = toCheckIsNumberOrInteger($("#productFinalDiscount").val().trim(), true);
+            if (checkForIncorrectValue(_billDiscountTxt)) {
+                _billDiscount = _billDiscountTxt;
+                _grandTotal = (_grandTotal - getDiscountPrice(_subTotalAmount, _billDiscountTxt));
+            }
+            var _billAdjustmentTxt = toCheckIsNumberOrInteger($("#ProductAdjustment").val().trim(), false);
+            if (checkForIncorrectValue(_billAdjustmentTxt)) {
+                if (toValidateAdjustment(_grandTotal, _billAdjustmentTxt)) {
+                    _grandTotal = (_grandTotal - _billAdjustmentTxt);
+                } else {
+                    _billAdjustmentTxt = 0;
+                }
+                _billAdjustment = _billAdjustmentTxt;
+            }
+        } else {
+            _grandTotal = 0;
+        }
+        $("#productAmountSubtotal").val(_subTotalAmount);
+        $("#PorductGrandTotal").val(_grandTotal);
+        _jsonTableBilling.BillingList = _jsonTableBillingList;
+        _jsonTableBilling.SubTotal = _subTotalAmount;
+        _jsonTableBilling.GrandTotal = _grandTotal;
+        _jsonTableBilling.Discount = _billDiscount;
+        _jsonTableBilling.Adjustment = _billAdjustment;
+        
+         
+    }
+
+    function toValidateAdjustment(_subTotalValue, _adjustmentVal) {
+        var returnAdjustmentValue = true;
+        if (_subTotalValue <= 0) {
+            $("#ProductAdjustment").val('');
+            toastr.error("Invalid sub-total value to perform adjustment");
+            returnAdjustmentValue = false;
+        }
+        else if (_subTotalValue < _adjustmentVal) {
+            $("#ProductAdjustment").val('');
+            toastr.error("Adjustment value should be less than sub total");
+            returnAdjustmentValue = false;
+        }
+        return returnAdjustmentValue;
+    }
+    function toValidateDiscountSubTotal(_subTotalValue, _dicountValue) {
+        var returnDicountValue = true;
+        if (_subTotalValue <= 0) {
+            $("#productFinalDiscount").val('');
+            toastr.error("Invalid sub-total value to perform discount");
+            returnDicountValue = false;
+        }
+        else if (_dicountValue > 100) {
+            $("#productFinalDiscount").val('');
+            toastr.error("Discount value should be less than 100");
+            returnDicountValue = false;
+        }
+        return returnDicountValue
+    }
+
+    function toValidateProductSelected(_productId, _isHasAlert) {
+        var returnIsProductSelected = true;
+        if (_productId.trim() == "" || _productId.trim() == "0") {
+            if (_isHasAlert == undefined || _isHasAlert == null) {
+                _isHasAlert = false;
+            }
+            if (_isHasAlert) {
+                toastr.error("Please select product name");
+            }
+            returnIsProductSelected = false;
+
+        }
+        return returnIsProductSelected;
+    }
+    function checkForIncorrectValue(_valueChk) {
+        var _returnVal = false;
+        if (_valueChk != NaN && _valueChk != null && _valueChk != 0 && _valueChk != "") {
+            _returnVal = true;
+        }
+        return _returnVal;
+    }
+
+    function getDiscountPrice(_totalVal, _discountVal) {
+        var discountVal = ((_totalVal * _discountVal) / 100);
+        return discountVal;
+    }
+    function toValidateInteger(_eVal) {
+        var returnIsInteger = false;
+        if (_eVal.shiftKey || _eVal.ctrlKey || _eVal.altKey) {
+            _eVal.preventDefault();
+        } else {
+            var key = _eVal.keyCode;
+            if (!((key == 8) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+                _eVal.preventDefault();
+            }
+        }
+    }
+    $(document).ready(function () {
+
+        $('#txtSearchProductName').on('change', function (e) {
+            var SearchProduct = $('#txtSearchProductName').val();
+
+            $.ajax({
+                url: '/Billing/GetProductNames?SearchProduct=' + SearchProduct,
+                type: 'GET',
+                success: fun2,
+                error: fun3
+            });
+        });
+        AddActiveProductRow();
+        //initializeMultiselect();
+        $(document).on("click", "#btnCreateProducts", function (e) {
+            e.stopImmediatePropagation();
+            AddActiveProductRow();
+        });
+
+        $(document).on("click", ".deleteProductRow", function (e) {
+            e.stopImmediatePropagation();
+            $(this).closest('tr').remove();
+        });
+
+        $(document).on("keypress", ".productSelection", function (e) {
+            e.stopImmediatePropagation();
+            // initiateAutoCompleter();
+        });
+    });
+
+    function AddActiveProductRow() {
+        var _htmlTrRow = $("#tblProductTbody").html();
+        $("#tblActiveProducts").append(_htmlTrRow);
+        initiateAutoCompleter();
+    }
+
+    function initializeMultiselect() {
+        $('#DdlCustomerNames').multiselect({
+            enableFiltering: true
+        });
+    }
+
+    function toCheckIsNumberOrInteger(_val, _isIntegerCheck) {
+        var valueToReturn = 0;
+        if (_val == undefined || _val == null || _val == NaN || _val == "") {
+            _val = "0";
+        }
+        if (_isIntegerCheck == undefined || _isIntegerCheck == null) {
+            _isIntegerCheck = false;
+        }
+        if (_isIntegerCheck) {
+            var _value = parseInt(_val);
+            if (_value == NaN || _value == undefined || _value == null) {
+                valueToReturn = 0;
+            } else {
+                valueToReturn = _value;
+            }
+        } else {
+            var _value = parseFloat(_val);
+            if (_value == NaN || _value == undefined || _value == null) {
+                valueToReturn = 0;
+            } else {
+                valueToReturn = _value;
+            }
+        }
+        return valueToReturn;
+    }
+
+    function whenSelectProductAddDetails(_pQuantity, _pPrice, _pDiscount, _obj) {
+        _obj.closest(".trBillingRow").find(".productQuantity").val(_pQuantity);
+        _obj.closest(".trBillingRow").find(".productPrice").val(_pPrice);
+        _obj.closest(".trBillingRow").find(".productDiscount").val(_pDiscount);
+        readTableAndCalculate();
+    }
+
+    function toClearBillingRow(_obj) {
+        _obj.closest('.trBillingRow').find('.productSelectionId').val('');
+        _obj.closest('.trBillingRow').find('.productQuantity').val('');
+        _obj.closest('.trBillingRow').find('.productPrice').val('');
+        _obj.closest('.trBillingRow').find('.productDiscount ').val('');
+        readTableAndCalculate(false);
+    }
+    function resetBillingPage() {
+        clearJsonObjectBilling();
+        $("#productAmountSubtotal").val('');
+        $("#productFinalDiscount").val('');
+        $("#ProductAdjustment").val('');
+        $("#PorductGrandTotal").val('');
+        $("#tblActiveProducts").empty();
+        $("#txtInvoiceDate").val('');
+        $("#ddnCustomer").val('0');
+        AddActiveProductRow();
+    }
+    function initiateAutoCompleter() {
+        $(".productSelection").autocomplete({
+            source: function (request, response) {
+                toClearBillingRow($(this));
+                $.ajax({
+                    type: 'GET',
+                    url: folderBaseURL + "Billing/GetProductByName",
+                    data: { ProductName: encodeURIComponent(request.term) }, // problem here
+                    dataType: 'json',
+                    success: function (jsonData) {
+                        response($.map(jsonData, function (item) {
+                            return {
+                                label: item.ProductName,
+                                value: item.ProductName,
+                                ProductNameId: item.ID,
+                                ProductQuantity: item.Quantity,
+                                ProductPrice: item.Price,
+                                ProductDiscount: item.Discount
+                            }
+                        }))
+                    }
+                });
+            },
+            delay: 0,
+            minLength: 2,
+            open: function () {
+                $(this).autocomplete("widget")
+                       .appendTo("#autocomplete-results")
+                       .css("position", "static")
+            },
+            focus: function (event, ui) {
+                $(this).attr("placeholder", ui.item.label);
+                return false;
+            },
+            select: function (event, ui) {
+                event.preventDefault();
+                $(this).val(ui.item.label);
+                $(this).closest('.trBillingRow').find(".productSelectionId").val(ui.item.ProductNameId);
+                var productQnty = toCheckIsNumberOrInteger(ui.item.ProductQuantity, true);
+                var productPrce = toCheckIsNumberOrInteger(ui.item.ProductPrice, false);
+                var productDscnt = toCheckIsNumberOrInteger(ui.item.ProductDiscount, false);
+                whenSelectProductAddDetails(productQnty, productPrce, productDscnt, $(this));
+            }
+        });
+    }
+</script>
+
+
